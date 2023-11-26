@@ -24,3 +24,5 @@ Jalankan aplikasi dengan perintah:
 ```bash
 streamlit run main.py
 ```
+# User manual 🧾
+- Tutorial [Klik di sini untuk melihat Usermanual 👋🏻](./User%20Manual.md)
