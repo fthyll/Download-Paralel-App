@@ -39,7 +39,7 @@ streamlit run main.py
 
 1. Masukkan jumlah URL yang ingin diunduh.
 2. Masukkan jumlah thread yang ingin digunakan.
-3. Masukkan URL yang ingin diunduh pada kolom URL sesuai dengan jumlah yang dimasukkan pada langkah 1
+3. Masukkan URL yang ingin diunduh pada kolom URL sesuai dengan jumlah yang dimasukkan pada langkah pertama
 
 ## Langkah 5: Mulai Unduh
 
