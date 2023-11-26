@@ -1,5 +1,3 @@
----
-
 # User Manual - Aplikasi Download Parallel
 
 Selamat datang di Aplikasi Download Parallel! Aplikasi ini memungkinkan Anda mengunduh file secara paralel menggunakan beberapa thread sekaligus. Berikut adalah langkah-langkah untuk menggunakan aplikasi ini:
@@ -50,5 +48,3 @@ Klik tombol "Mulai Unduh 🚀" untuk memulai proses unduh. Proses unduh akan dit
 ## Langkah 6: Selesai
 
 Setelah proses unduh selesai, file-file hasil unduhan akan disimpan dalam folder "result_file". Anda dapat menemukan file-file tersebut dengan ekstensi yang sesuai dengan tipe kontennya.
-
----
