@@ -9,7 +9,6 @@
     - [Langkah 4: Mulai Unduh](#langkah-4-mulai-unduh)
 3. [Tentang Proyek](#tentang-proyek)
 4. [Penulis](#penulis)
-5. [Hubungi Kami](#hubungi-kami)
 
 ## Pendahuluan
 Selamat datang di **MultiFetch Download Manager**, sebuah aplikasi berbasis Streamlit yang dirancang untuk mata kuliah "Sistem Paralel Dan Terdistribusi." Proyek ini memungkinkan Anda mengunduh file menggunakan beberapa thread secara bersamaan.
