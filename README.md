@@ -16,7 +16,7 @@ Clone repositori ini ke komputer Anda menggunakan perintah Git berikut:
 
 ```bash
 git clone [URL https://github.com/fthyll/Download-Paralel-App]
-cd [nama Download Paralel App]
+cd Download Paralel App
 ```
 
 ## Langkah 2: Install Dependensi
