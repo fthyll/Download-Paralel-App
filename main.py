@@ -70,7 +70,7 @@ def main():
 
     show_sidebar()
 
-    num_urls = st.number_input("🔽 Masukkan jumlah URL yang ingin diunduh 🔽", min_value=1, step=1, value=1)
+    num_urls = st.number_input("🔗 Masukkan jumlah URL yang ingin diunduh 🔗", min_value=1, step=1, value=1)
     num_threads = st.number_input("🧬 Masukkan jumlah threads yang ingin digunakan 🧬", min_value=1, step=1, value=4)
 
     target_directory = st.text_input("📂 Pilih direktori penyimpanan file (e.g., result_files):", "result_files")
