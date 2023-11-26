@@ -2,21 +2,25 @@ import streamlit as st
 import requests
 import os
 from urllib.parse import urlparse
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExecutor
 import io
 import time
 import pandas as pd
+from queue import Queue
 
-def download_chunk(url, start_byte, end_byte, buffer, progress_bar):
+def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_queue):
     headers = {'Range': f'bytes={start_byte}-{end_byte}'}
     response = requests.get(url, headers=headers, stream=True)
-    
-    total_size = int(response.headers.get('content-length', 0))
-    chunk_size = end_byte - start_byte + 1
 
+    chunk_size = end_byte - start_byte + 1
     buffer.write(response.content)
-    progress_bar.progress((start_byte + chunk_size) / total_size)
-    
+
+    # Calculate progress
+    progress = (start_byte + chunk_size) / total_size
+
+    # Enqueue progress value to the queue
+    progress_queue.put(progress)
+
 def download_with_progress(url, num_threads=4):
     response = requests.head(url)
     total_size = int(response.headers.get('content-length', 0))
@@ -27,13 +31,13 @@ def download_with_progress(url, num_threads=4):
 
     content_buffers = [io.BytesIO() for _ in range(num_threads)]
 
-    progress_bar = st.progress(0)
+    progress_queue = Queue()
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = []
 
         for i in range(num_threads):
-            future = executor.submit(download_chunk, url, ranges[i][0], ranges[i][1], content_buffers[i], progress_bar)
+            future = executor.submit(download_chunk, url, ranges[i][0], ranges[i][1], content_buffers[i], total_size, progress_queue)
             futures.append(future)
 
         for future in as_completed(futures):
@@ -42,23 +46,23 @@ def download_with_progress(url, num_threads=4):
 
         final_content = b"".join(buffer.getvalue() for buffer in content_buffers)
 
-    return final_content, response.headers.get('Content-Type')
+    return final_content, response.headers.get('Content-Type'), progress_queue
 
 def show_sidebar():
-    st.sidebar.title("About this project")
+    st.sidebar.title("📚 About this project 📚")
     st.sidebar.write("Project ini ditujukan untuk memenuhi tugas besar mata kuliah Sistem Paralel Dan Terdistribusi.")
     st.sidebar.write("Pada project ini Anda dapat melakukan unduh file dengan menggunakan beberapa thread sekaligus.")
-    st.sidebar.subheader("User Manual")
+    st.sidebar.subheader("User Manual 📖")
     st.sidebar.write("1. Masukkan URL yang ingin diunduh pada kolom URL")
     st.sidebar.write("2. Masukkan jumlah thread yang ingin digunakan pada kolom Thread")
     st.sidebar.write("3. Klik tombol Mulai Unduh untuk memulai proses unduh")
-    st.sidebar.subheader("Author")
+    st.sidebar.subheader("Author 📝")
     st.sidebar.markdown("**Karina Khairunnisa Putri (1301213106)**")
     st.sidebar.write("Diandra Lintang Hanintya (1301213072)")
     st.sidebar.write("Naufal Hilmi Majid (1301213430)")
     st.sidebar.write("Muhammad Fatih Yumna Lajuwirdi Lirrahman (1301213389)")
     st.sidebar.write("Benito Raymond (1301213345)")
-    st.sidebar.subheader("Find us at")
+    st.sidebar.subheader("Find us at 🔎")
     st.sidebar.button("Github", key="github")
 
 def main():
@@ -82,17 +86,18 @@ def main():
         start_time = time.time()
 
         for url in urls:
-            content, content_type = download_with_progress(url, num_threads)
+            content, content_type, progress_queue = download_with_progress(url, num_threads)
             save_file(url, content, content_type, target_directory)
+
+            # Retrieve progress values from the queue and update the progress bar
+            while not progress_queue.empty():
+                progress = progress_queue.get()
+                st.progress(progress)
 
         end_time = time.time()
         elapsed_time = end_time - start_time
-        st.success(f"Proses unduh selesai! 🎉 Waktu yang diperlukan: {elapsed_time:.2f} detik")
-
-        # Display the download traffic data
-        df = pd.DataFrame({'Time (s)': [i for i in range(int(elapsed_time) + 1)],
-                           'Downloaded (MB)': [len(content) / (1024 * 1024) for _ in range(int(elapsed_time) + 1)]})
-        st.line_chart(df.set_index('Time (s)'))
+        st.success(f"Proses unduh selesai! 🎉 Waktu yang diperlukan: {elapsed_time:.2f} detik ⌛️")
+        
 
 def save_file(url, content, content_type, target_directory):
     if content_type:
