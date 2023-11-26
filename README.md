@@ -15,8 +15,8 @@ pip install streamlit requests tqdm
 Clone repositori ini ke komputer Anda menggunakan perintah Git berikut:
 
 ```bash
-git clone [URL repositori]
-cd [nama folder]
+git clone [URL https://github.com/fthyll/Download-Paralel-App]
+cd [nama Download Paralel App]
 ```
 
 ## Langkah 2: Install Dependensi
