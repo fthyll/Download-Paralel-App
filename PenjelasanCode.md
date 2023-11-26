@@ -152,7 +152,7 @@ def save_file(url, content, content_type, target_directory):
         f.write(content)
 ```
 
--
+
 
  Fungsi ini menyimpan file yang diunduh ke dalam direktori yang telah ditentukan.
 - Menggunakan tipe konten untuk menentukan ekstensi file.
