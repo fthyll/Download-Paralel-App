@@ -22,7 +22,7 @@ pip install -r requirements.txt
 Jalankan aplikasi dengan perintah:
 
 ```bash
-streamlit run main.py
+streamlit run app.py
 ```
 # User manual 🧾 dan Penjelasan Code 🛠️
 - User Manual [Klik di sini untuk melihat User Manual 👋🏻](./UserManual.md)
