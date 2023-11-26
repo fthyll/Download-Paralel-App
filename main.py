@@ -2,11 +2,11 @@ import streamlit as st
 import requests
 import os
 from urllib.parse import urlparse
-from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from queue import Queue
 import io
 import time
 import pandas as pd
-from queue import Queue
 
 def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_queue):
     headers = {'Range': f'bytes={start_byte}-{end_byte}'}
