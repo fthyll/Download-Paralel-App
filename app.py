@@ -96,7 +96,10 @@ def main():
 
         end_time = time.time()
         elapsed_time = end_time - start_time
+
+        # Menampilkan direktori penyimpanan
         st.success(f"Proses unduh selesai! 🎉 Waktu yang diperlukan: {elapsed_time:.2f} detik ⌛️")
+        st.write(f"File-file disimpan di: {os.path.abspath(target_directory)}")
         
 
 def save_file(url, content, content_type, target_directory):
