@@ -15,10 +15,10 @@ def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_queue
     chunk_size = end_byte - start_byte + 1
     buffer.write(response.content)
 
-    # Calculate progress
+
     progress = (start_byte + chunk_size) / total_size
 
-    # Enqueue progress value to the queue
+
     progress_queue.put(progress)
 
 def download_with_progress(url, num_threads=4):
@@ -41,7 +41,7 @@ def download_with_progress(url, num_threads=4):
             futures.append(future)
 
         for future in as_completed(futures):
-            # Use result() to propagate exceptions if any
+            
             future.result()
 
         final_content = b"".join(buffer.getvalue() for buffer in content_buffers)
@@ -89,7 +89,7 @@ def main():
             content, content_type, progress_queue = download_with_progress(url, num_threads)
             save_file(url, content, content_type, target_directory)
 
-            # Retrieve progress values from the queue and update the progress bar
+
             while not progress_queue.empty():
                 progress = progress_queue.get()
                 st.progress(progress)
@@ -97,7 +97,6 @@ def main():
         end_time = time.time()
         elapsed_time = end_time - start_time
 
-        # Menampilkan direktori penyimpanan
         st.success(f"Proses unduh selesai! 🎉 Waktu yang diperlukan: {elapsed_time:.2f} detik ⌛️")
         st.write(f"File-file disimpan di: {os.path.abspath(target_directory)}")
         

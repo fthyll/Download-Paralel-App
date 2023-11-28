@@ -119,6 +119,7 @@ def main():
         end_time = time.time()
         elapsed_time = end_time - start_time
         st.success(f"Proses unduh selesai! 🎉 Waktu yang diperlukan: {elapsed_time:.2f} detik ⌛️")
+        st.write(f"File-file disimpan di: {os.path.abspath(target_directory)}")
 ```
 
 - Fungsi ini merupakan fungsi utama yang menjalankan aplikasi Streamlit.
