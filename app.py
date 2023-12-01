@@ -3,23 +3,18 @@ import requests
 import os
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from queue import Queue
 import io
 import time
-import pandas as pd
 
-def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_queue):
+def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_list):
     headers = {'Range': f'bytes={start_byte}-{end_byte}'}
     response = requests.get(url, headers=headers, stream=True)
 
     chunk_size = end_byte - start_byte + 1
     buffer.write(response.content)
 
-
     progress = (start_byte + chunk_size) / total_size
-
-
-    progress_queue.put(progress)
+    progress_list.append(progress)
 
 def download_with_progress(url, num_threads=4):
     response = requests.head(url)
@@ -31,22 +26,41 @@ def download_with_progress(url, num_threads=4):
 
     content_buffers = [io.BytesIO() for _ in range(num_threads)]
 
-    progress_queue = Queue()
+    progress_list = []
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = []
 
         for i in range(num_threads):
-            future = executor.submit(download_chunk, url, ranges[i][0], ranges[i][1], content_buffers[i], total_size, progress_queue)
+            future = executor.submit(download_chunk, url, ranges[i][0], ranges[i][1], content_buffers[i], total_size, progress_list)
             futures.append(future)
 
         for future in as_completed(futures):
-            
             future.result()
 
-        final_content = b"".join(buffer.getvalue() for buffer in content_buffers)
+    final_content = b"".join(buffer.getvalue() for buffer in content_buffers)
 
-    return final_content, response.headers.get('Content-Type'), progress_queue
+    return final_content, response.headers.get('Content-Type'), progress_list
+
+def save_file(url, content, content_type, target_directory):
+    if content_type:
+        extension = content_type.split('/')[-1]
+    else:
+        extension = 'unknown'
+
+    os.makedirs(target_directory, exist_ok=True)
+
+    parsed_url = urlparse(url)
+    filename = os.path.basename(parsed_url.path)
+
+    filename = filename.replace('%20', ' ')
+
+    if '.' in filename:
+        parts = filename.split('.')
+        filename = '.'.join(parts[:-1])
+
+    with open(os.path.join(target_directory, f"{filename}.{extension}"), "wb") as f:
+        f.write(content)
 
 def show_sidebar():
     st.sidebar.title("📚 About this project 📚")
@@ -85,13 +99,25 @@ def main():
 
         start_time = time.time()
 
+        all_content = []
+        all_content_types = []
+        all_progress_lists = []
+
         for url in urls:
-            content, content_type, progress_queue = download_with_progress(url, num_threads)
+            content, content_type, progress_list = download_with_progress(url, num_threads)
+            all_content.append(content)
+            all_content_types.append(content_type)
+            all_progress_lists.append(progress_list)
+
+        target_directory = "result_files"
+
+        for i, url in enumerate(urls):
+            content = all_content[i]
+            content_type = all_content_types[i]
+            progress_list = all_progress_lists[i]
             save_file(url, content, content_type, target_directory)
 
-
-            while not progress_queue.empty():
-                progress = progress_queue.get()
+            for progress in progress_list:
                 st.progress(progress)
 
         end_time = time.time()
@@ -99,27 +125,6 @@ def main():
 
         st.success(f"Proses unduh selesai! 🎉 Waktu yang diperlukan: {elapsed_time:.2f} detik ⌛️")
         st.write(f"File-file disimpan di: {os.path.abspath(target_directory)}")
-        
-
-def save_file(url, content, content_type, target_directory):
-    if content_type:
-        extension = content_type.split('/')[-1]
-    else:
-        extension = 'unknown'
-
-    os.makedirs(target_directory, exist_ok=True)
-
-    parsed_url = urlparse(url)
-    filename = os.path.basename(parsed_url.path)
-
-    filename = filename.replace('%20', ' ')
-
-    if '.' in filename:
-        parts = filename.split('.')
-        filename = '.'.join(parts[:-1])
-
-    with open(os.path.join(target_directory, f"{filename}.{extension}"), "wb") as f:
-        f.write(content)
 
 if __name__ == "__main__":
     main()
