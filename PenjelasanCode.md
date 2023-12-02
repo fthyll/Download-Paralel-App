@@ -1,4 +1,4 @@
-### 1 Import Module
+### 1.Import Module
 
 ```python
 import streamlit as st
@@ -27,7 +27,7 @@ from multiprocessing import cpu_count
 
 8. `from multiprocessing import cpu_count`: Digunakan untuk mendapatkan jumlah core CPU yang tersedia pada sistem.
 
-### 2 Fungsi `download_chunk`
+### 2.Fungsi `download_chunk`
 
 Fungsi `download_chunk` ini sepertinya merupakan bagian dari suatu kode yang bertujuan untuk mengunduh data dari suatu URL secara terpisah (dalam bentuk chunk atau bagian-bagian) dengan menggunakan HTTP Range Requests. Mari kita bahas satu per satu:
 
@@ -61,7 +61,7 @@ def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_list)
 
 7. `progress_list.append(progress)`: Menambahkan nilai kemajuan (`progress`) ke dalam daftar kemajuan (`progress_list`). Ini dapat digunakan untuk memantau kemajuan unduhan secara keseluruhan.
 
-### 3 Fungsi `download_with_progress`
+### 3.Fungsi `download_with_progress`
 Fungsi `download_with_progress` ini sepertinya merupakan implementasi dari unduhan paralel dengan menggunakan beberapa thread untuk meningkatkan kecepatan unduhan. Mari kita jelaskan baris per baris:
 
 ```python
@@ -129,7 +129,7 @@ def download_with_progress(url, num_threads=None, max_threads=8):
 
 8. Menggabungkan semua bagian yang diunduh dari setiap thread menjadi satu konten (`final_content`). Selanjutnya, mengembalikan konten, tipe konten (Content-Type), dan daftar kemajuan unduhan.
 
-### 4 Fungsi `save_file`
+### 4.Fungsi `save_file`
 Fungsi `save_file` ini bertujuan untuk menyimpan konten yang diunduh dari suatu URL ke dalam sebuah file di direktori target. Berikut adalah penjelasan baris per baris:
 
 ```python
@@ -176,7 +176,7 @@ def save_file(url, content, content_type, target_directory):
 
 6. Membuka file untuk ditulis di direktori target dengan nama yang telah dibuat dan ekstensi yang sudah diambil. Menulis konten yang diunduh ke dalam file tersebut dalam mode binary (`"wb"`).
 
-### 5 Fungsi `show_sidebar`
+### 5.Fungsi `show_sidebar`
 Fungsi `show_sidebar` ini sepertinya bertujuan untuk menampilkan informasi dan panduan pengguna di sidebar antarmuka pengguna web Streamlit. Berikut adalah penjelasan setiap bagian:
 
 ```python
@@ -215,7 +215,7 @@ def show_sidebar():
 
 4. Menampilkan subjudul dan tombol di sidebar. Tombol ini mungkin berfungsi sebagai tautan ke halaman GitHub proyek.
 
-### 6 Fungsi `main`
+### 6.Fungsi `main`
 
 Fungsi `main` ini adalah fungsi utama dari program yang menggunakan Streamlit untuk membuat antarmuka pengguna web. Berikut adalah penjelasan setiap bagian:
 
@@ -284,7 +284,7 @@ def main():
 
 5. Mengeksekusi unduhan dan penyimpanan file menggunakan fungsi `download_with_progress` dan `save_file`. Menampilkan kemajuan unduhan menggunakan elemen antarmuka `st.progress`. Memberikan informasi ke pengguna setelah selesai, termasuk waktu yang diperlukan dan direktori penyimpanan file.
 
-### 7 Bagian `if __name__ == "__main__":`
+### 7.Bagian `if __name__ == "__main__":`
 
 Bagian `if __name__ == "__main__":` merupakan bagian terakhir dari skrip Python yang umumnya digunakan untuk mengeksekusi fungsi `main()` ketika skrip dijalankan secara langsung. 
 
