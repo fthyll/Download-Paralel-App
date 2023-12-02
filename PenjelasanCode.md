@@ -1,4 +1,4 @@
-### Import Module
+### 1 Import Module
 
 ```python
 import streamlit as st
@@ -27,7 +27,7 @@ from multiprocessing import cpu_count
 
 8. `from multiprocessing import cpu_count`: Digunakan untuk mendapatkan jumlah core CPU yang tersedia pada sistem.
 
-### Fungsi `download_chunk`
+### 2 Fungsi `download_chunk`
 
 Fungsi `download_chunk` ini sepertinya merupakan bagian dari suatu kode yang bertujuan untuk mengunduh data dari suatu URL secara terpisah (dalam bentuk chunk atau bagian-bagian) dengan menggunakan HTTP Range Requests. Mari kita bahas satu per satu:
 
