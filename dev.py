@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import io
 import time
+from multiprocessing import cpu_count
 
 def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_list):
     headers = {'Range': f'bytes={start_byte}-{end_byte}'}
@@ -16,7 +17,14 @@ def download_chunk(url, start_byte, end_byte, buffer, total_size, progress_list)
     progress = (start_byte + chunk_size) / total_size
     progress_list.append(progress)
 
-def download_with_progress(url, num_threads=4):
+def download_with_progress(url, num_threads=None, max_threads=8):
+    if num_threads is None:
+        num_threads = min(cpu_count(), max_threads)  # Use min to limit the threads to max_threads
+
+    if num_threads > max_threads:
+        st.warning(f"Number of threads ({num_threads}) exceeds the maximum allowed (8). Using 8 threads instead.")
+        num_threads = max_threads
+
     response = requests.head(url)
     total_size = int(response.headers.get('content-length', 0))
 
