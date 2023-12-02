@@ -27,4 +27,4 @@ streamlit run app.py
 # User manual 🧾 dan Penjelasan Code 🛠️
 - User Manual [Klik di sini untuk melihat User Manual 👋🏻](./UserManual.md)
 
-- Code Comment+ [Klik di sini untuk melihat Code dan Penjelasan 👋🏻](./PenjelasanCode.md)
+- Penjelasan Code [Klik di sini untuk melihat Code dan Penjelasan 👋🏻](./PenjelasanCode.md)
